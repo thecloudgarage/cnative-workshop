@@ -1,0 +1,17 @@
+STOP
+
+bosh alias-env pcf -e 172.31.32.11 --ca-cert /var/tempest/workspaces/default/root_ca_certificate
+bosh -e pcf login (BOSH Director > UAA Admin Credentials)
+bosh -e pcf deployments
+bosh -e pcf -d cf-cdef2cc8c749001fb34c stop --hard -n
+bosh -e pcf -d harbor-container-registry-dbbd6e7f7b6cb3118cf7 stop --hard -n
+bosh -e pcf -d pivotal-container-service-2a6b8cb315c29cf0f118 stop --hard -n
+bosh -e pcf -d pivotal-mysql-d96a8add026b0d1af82b stop --hard -n
+
+START
+
+bosh -e pcf login (BOSH Director > UAA Admin Credentials)
+bosh -e pcf -d cf-cdef2cc8c749001fb34c start -n
+bosh -e pcf -d harbor-container-registry-dbbd6e7f7b6cb3118cf7 start -n
+bosh -e pcf -d pivotal-container-service-2a6b8cb315c29cf0f118 start -n
+bosh -e pcf -d pivotal-mysql-d96a8add026b0d1af82b start -n
