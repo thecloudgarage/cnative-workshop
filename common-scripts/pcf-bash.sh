@@ -22,10 +22,10 @@ sudo wget --post-data="" --header="Authorization: Token $pivnetToken" $mysqlPivn
 sudo curl -vv --progress-bar -H 'Authorization: bearer '"$uaaToken"'' -k -X POST https://localhost/api/v0/stemcells -F \
   'stemcell[file]=@'"$stemcellPivnetProductName"''
 sudo curl -vv --progress-bar -H 'Authorization: bearer '"$uaaToken"'' -k -X POST https://localhost/api/v0/available_products -F \
-  'product[file]=@'"$pasPivnetProductName"''
+'product[file]=@'"$pasPivnetProductName"''
 sudo curl -vv --progress-bar -H 'Authorization: bearer '"$uaaToken"'' -k -X POST https://localhost/api/v0/available_products -F \
-  'product[file]=@'"$pksPivnetProductName"''
+'product[file]=@'"$pksPivnetProductName"''
 sudo curl -vv --progress-bar -H 'Authorization: bearer '"$uaaToken"'' -k -X POST https://localhost/api/v0/available_products -F \
-  'product[file]=@'"$harborPivnetProductName"''
+'product[file]=@'"$harborPivnetProductName"''
 sudo curl -vv --progress-bar -H 'Authorization: bearer '"$uaaToken"'' -k -X POST https://localhost/api/v0/available_products -F \
-  'product[file]=@'"$mysqlPivnetProductName"''
+'product[file]=@'"$mysqlPivnetProductName"''
