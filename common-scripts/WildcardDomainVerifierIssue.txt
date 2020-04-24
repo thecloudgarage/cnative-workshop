@@ -18,7 +18,7 @@ curl "https://OPS-MAN-FQDN/api/v0/staged/products" -k \
 
 Locate the cf-xxxxxxx and the guid for the same
 
-curl "https://OPS-MAN-FQDN/api/v0/staged/products/PRODUCT-GUID/verifiers/install_time/WildcardDomainVerifier" \
+curl "https://OPS-MAN-FQDN/api/v0/staged/products/PRODUCT-GUID/verifiers/install_time/WildcardDomainVerifier" -k \
 -X PUT \
 -H "Authorization: Bearer UAA_ACCESS_TOKEN" \
 -H "Content-Type: application/json" \
