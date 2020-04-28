@@ -1,6 +1,5 @@
 #!/bin/bash
-IP=$( aws --region us-east-1 ec2 describe-instances --filters 'Name=tag:Name,Values=opsman' --query 'Reservations[*].Ins
-tances[*].[PublicIpAddress]' --output text )
+IP=$( aws --region us-east-1 ec2 describe-instances --filters 'Name=tag:Name,Values=opsman' --query 'Reservations[*].Instances[*].[PublicIpAddress]' --output text )
 
 INPUT_JSON=$( cat ./route53-opsman.json | sed "s/127\.0\.0\.1/$IP/" )
 
