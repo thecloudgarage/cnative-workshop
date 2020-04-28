@@ -9,7 +9,7 @@ export pksguid=$( curl "https://localhost/api/v0/staged/products" -k \
   | jq --raw-output '.[] | select(.installation_name|test("pivotal-container-service.")) | .guid' )
 
 export uaaadminpassword=$( sudo curl \
-  "https://opsman.thecloudgarage.com/api/v0/deployed/products/$pksguid/credentials/.properties.uaa_admin_password \
+  "https://opsman.thecloudgarage.com/api/v0/deployed/products/'$pksguid'/credentials/.properties.uaa_admin_password \
   -k -H 'Authorization: bearer '"$uaaToken"'' )
   
 pks login -a api.pks.aws.thecloudgarage.com -u admin -p $uaaadminpassword -k
