@@ -37,3 +37,9 @@ sudo curl -vv --progress-bar -H 'Authorization: bearer '"$uaaToken"'' -k -X POST
   'product[file]=@'"$mysqlPivnetProductName"''
   
 #DISABLE THE WILDCARD VERFIER FOR PIVOTAL APPLICATION SERVICE AS DNS IS NOT YET SETUP
+export pasguid=$( curl "https://localhost/api/v0/staged/products" -k \
+  -X GET \
+  -H 'Authorization: Bearer '"$uaaToken"'' \
+  | jq --raw-output '.[] | select(.installation_name|test("pivotal-container-service.")) | .guid' )
+
+echo "PKS GU-ID is: $pksguid"
