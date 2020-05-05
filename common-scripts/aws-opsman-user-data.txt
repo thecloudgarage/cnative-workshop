@@ -1,0 +1,9 @@
+#!/bin/bash
+cd /home/ubuntu
+sudo git clone https://github.com/thecloudgarage/cnative-workshop.git
+cd /home/ubuntu/cnative-workshop/common-scripts/
+sudo sed 's/your-legacy-api-token/Ex58-tDkfHxszQQRNdKf/g' pcf-aws-init.sh > pcf-aws-init-changed.sh && mv pcf-aws-init-changed.sh pcf-aws-init.sh
+sudo sed 's/your-legacy-api-token/Ex58-tDkfHxszQQRNdKf/g' aws-install-tools.sh > aws-install-tools-changed.sh && mv aws-install-tools-changed.sh aws-install-tools.sh
+sudo chmod +x pcf-aws-init.sh
+sudo chmod +x aws-install-tools.sh
+sudo ./aws-install-tools.sh
