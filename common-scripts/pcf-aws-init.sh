@@ -1,6 +1,6 @@
 #!/bin/bash
 
-export pivnetToken=your-pivnet-token
+export pivnetToken=your-legacy-api-token
 
 #SET VARIABLES FOR TILE NAMES TO BE DOWNLOADED FROM PIVOTAL NETWORK
 
