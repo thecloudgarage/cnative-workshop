@@ -40,6 +40,14 @@ sudo curl -vv --progress-bar -H 'Authorization: bearer '"$uaaToken"'' -k -X POST
 export pasguid=$( curl "https://localhost/api/v0/staged/products" -k \
   -X GET \
   -H 'Authorization: Bearer '"$uaaToken"'' \
-  | jq --raw-output '.[] | select(.installation_name|test("pivotal-container-service.")) | .guid' )
+  | jq --raw-output '.[] | select(.installation_name|test("cf.")) | .guid' )
 
-echo "PKS GU-ID is: $pksguid"
+echo "PAS GU-ID is: $pasguid"
+
+Locate the cf-xxxxxxx and the guid for the same
+
+curl "https://localhost/api/v0/staged/products/PRODUCT-GUID/verifiers/install_time/WildcardDomainVerifier" -k \
+-X PUT \
+-H 'Authorization: Bearer '"$uaaToken"'' \
+-H "Content-Type: application/json" \
+-d '{ "enabled": false }'
