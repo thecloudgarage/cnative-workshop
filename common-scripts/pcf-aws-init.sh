@@ -1,5 +1,8 @@
 #!/bin/bash
 
+#BEFORE STARTING PLEASE MANUALLY VISIT THE PIVOTAL WEBSITE AND ACCEPT THE EULAS FOR THE PRODUCTS & STEMCELLS THAT WILL BE DOWNLOADED
+#PIVOTAL HAS DISABLED EXTERNAL API ACCESS TO EULA ACCEPTANCE DUE TO LEGAL REASONS
+
 export pivnetToken=your-legacy-api-token
 
 #SET VARIABLES FOR TILE NAMES TO BE DOWNLOADED FROM PIVOTAL NETWORK
@@ -35,98 +38,6 @@ export redisPivnetUrl=https://network.pivotal.io/api/v2/products/p-redis/release
 export redisPivnetProductName=p-redis-2.3.3-build.2.pivotal
 export awsservicebrokerPivnetUrl=https://network.pivotal.io/api/v2/products/aws-services/releases/567835/product_files/600335/download
 export awsservicebrokerPivnetProductName=aws-services-1.4.16.256.pivotal
-
-#ACCEPT EULA FOR UBUNTU STEMCELL 456 ON PIVOTAL NETWORK
-
-curl -i -H "Accept: application/json" \
-  -H "Content-Type: application/json" \
-  -H 'Authorization: Token '"$pivnetToken"'' \
-  -X POST https://network.pivotal.io/api/v2/products/stemcells-ubuntu-xenial/releases/579634/eula_acceptance
-
-#ACCEPT EULA FOR UBUNTU STEMCELL 621 ON PIVOTAL NETWORK
-
-curl -i -H "Accept: application/json" \
-  -H "Content-Type: application/json" \
-  -H 'Authorization: Token '"$pivnetToken"'' \
-  -X POST https://network.pivotal.io/api/v2/products/stemcells-ubuntu-xenial/releases/630534/eula_acceptance
-
-#ACCEPT EULA FOR UBUNTU STEMCELL 315 ON PIVOTAL NETWORK
-
-curl -i -H "Accept: application/json" \
-  -H "Content-Type: application/json" \
-  -H 'Authorization: Token '"$pivnetToken"'' \
-  -X POST https://network.pivotal.io/api/v2/products/stemcells-ubuntu-xenial/releases/626507/eula_acceptance
-
-#ACCEPT EULA FOR WINDOWS STEMCELL 2019 ON PIVOTAL NETWORK
-
-curl -i -H "Accept: application/json" \
-  -H "Content-Type: application/json" \
-  -H 'Authorization: Token '"$pivnetToken"'' \
-  -X POST https://network.pivotal.io/api/v2/products/stemcells-windows-server/releases/630457/eula_acceptance
-
-#ACCEPT EULA FOR UBUNTU STEMCELL 250 ON PIVOTAL NETWORK
-
-curl -i -H "Accept: application/json" \
-  -H "Content-Type: application/json" \
-  -H 'Authorization: Token '"$pivnetToken"'' \
-  -X POST https://network.pivotal.io/api/v2/products/stemcells-ubuntu-xenial/releases/630535/eula_acceptance
-
-#ACCEPT EULA FOR TANZU APPLICATION SERVICE ON PIVOTAL NETWORK
-
-curl -i -H "Accept: application/json" \
-  -H "Content-Type: application/json" \
-  -H 'Authorization: Token '"$pivnetToken"'' \
-  -X POST https://network.pivotal.io/api/v2/products/elastic-runtime/releases/582590/eula_acceptance
-
-#ACCEPT EULA FOR TANZU KUBERNETES GRID-INTEGRATED (ERSTWHILE ENTERPRISE PKS) ON PIVOTAL NETWORK
-
-curl -i -H "Accept: application/json" \
-  -H "Content-Type: application/json" \
-  -H 'Authorization: Token '"$pivnetToken"'' \
-  -X POST https://network.pivotal.io/api/v2/products/pivotal-container-service/releases/551663/eula_acceptance
-
-#ACCEPT EULA FOR HARBOR ON PIVOTAL NETWORK
-
-curl -i -H "Accept: application/json" \
-  -H "Content-Type: application/json" \
-  -H 'Authorization: Token '"$pivnetToken"'' \
-  -X POST https://network.pivotal.io/api/v2/products/harbor-container-registry/releases/579832/eula_acceptance
-
-#ACCEPT EULA FOR MYSQL ON PIVOTAL NETWORK
-
-curl -i -H "Accept: application/json" \
-  -H "Content-Type: application/json" \
-  -H 'Authorization: Token '"$pivnetToken"'' \
-  -X POST https://network.pivotal.io/api/v2/products/pivotal-mysql/releases/584606/eula_acceptance
-
-#ACCEPT EULA FOR RABBITMQ ON PIVOTAL NETWORK
-
-curl -i -H "Accept: application/json" \
-  -H "Content-Type: application/json" \
-  -H 'Authorization: Token '"$pivnetToken"'' \
-  -X POST https://network.pivotal.io/api/v2/products/p-rabbitmq/releases/601550/eula_acceptance
-
-#ACCEPT EULA FOR TANZU APPLICATION SERVICE (WINDOWS) ON PIVOTAL NETWORK
-
-curl -i -H "Accept: application/json" \
-  -H "Content-Type: application/json" \
-  -H 'Authorization: Token '"$pivnetToken"'' \
-  -X POST https://network.pivotal.io/api/v2/products/pas-windows/releases/625232/eula_acceptance
-
-#ACCEPT EULA FOR REDIS ON PIVOTAL NETWORK
-
-curl -i -H "Accept: application/json" \
-  -H "Content-Type: application/json" \
-  -H 'Authorization: Token '"$pivnetToken"'' \
-  -X POST https://network.pivotal.io/api/v2/products/p-redis/releases/626432/eula_acceptance
-
-#ACCEPT EULA FOR AWS SERVICE BROKER ON PIVOTAL NETWORK
-
-curl -i -H "Accept: application/json" \
-  -H "Content-Type: application/json" \
-  -H 'Authorization: Token '"$pivnetToken"'' \
-  -X POST https://network.pivotal.io/api/v2/products/aws-services/releases/567835/eula_acceptance
-
 
 #DOWNLOAD REQUIRED STEMCELLS (HARDENED OS) TO RUN VARIOUS WORKLOADS AND PLATFORM COMPONENTS
 sudo wget --post-data="" --header="Authorization: Token $pivnetToken" $stemcell456PivnetUrl -O "$stemcell456PivnetProductName"
