@@ -1,6 +1,6 @@
 #!/bin/bash
 
-#DOWNLOAD THE TILES FROM PIVOTAL NETWORK
+#SET VARIABLES FOR TILE NAMES TO BE DOWNLOADED FROM PIVOTAL NETWORK
 
 echo Please provide your Pivnet token
 read -e -p "pivnetToken: " -i "whatisyourtoken" pivnetToken
@@ -15,6 +15,8 @@ read -e -p "stemcellPivnetUrl: " -i "https://network.pivotal.io/api/v2/products/
 read -e -p "stemcellPivnetProductName: " -i "light-bosh-stemcell-456.98-aws-xen-hvm-ubuntu-xenial-go_agent.tgz" stemcellPivnetProductName
 read -e -p "mysqlPivnetUrl: " -i "https://network.pivotal.io/api/v2/products/pivotal-mysql/releases/584606/product_files/618567/download" mysqlPivnetUrl
 read -e -p "mysqlPivnetProductName: " -i "pivotal-mysql-2.7.6-build.21.pivotal" mysqlPivnetProductName
+
+#DOWNLOAD TILES FROM PIVOTAL NETWORK
 sudo wget --post-data="" --header="Authorization: Token $pivnetToken" $pasPivnetUrl -O "$pasPivnetProductName"
 sudo wget --post-data="" --header="Authorization: Token $pivnetToken" $pksPivnetUrl -O "$pksPivnetProductName"
 sudo wget --post-data="" --header="Authorization: Token $pivnetToken" $harborPivnetUrl -O "$harborPivnetProductName"
@@ -44,9 +46,7 @@ export pasguid=$( curl "https://localhost/api/v0/staged/products" -k \
 
 echo "PAS GU-ID is: $pasguid"
 
-Locate the cf-xxxxxxx and the guid for the same
-
-curl "https://localhost/api/v0/staged/products/PRODUCT-GUID/verifiers/install_time/WildcardDomainVerifier" -k \
+curl "https://localhost/api/v0/staged/products/$pasguid/verifiers/install_time/WildcardDomainVerifier" -k \
 -X PUT \
 -H 'Authorization: Bearer '"$uaaToken"'' \
 -H "Content-Type: application/json" \
