@@ -1,9 +1,8 @@
 #!/bin/bash
 
-#SET VARIABLES FOR TILE NAMES TO BE DOWNLOADED FROM PIVOTAL NETWORK
+export pivnetToken=your-pivnet-token
 
-echo Please provide your Pivnet token
-read -e -p "pivnetToken: " -i "whatisyourtoken" pivnetToken
+#SET VARIABLES FOR TILE NAMES TO BE DOWNLOADED FROM PIVOTAL NETWORK
 
 #SPECIFIY REQUIRED STEMCELLS (HARDENED OS) TO RUN VARIOUS WORKLOADS AND PLATFORM COMPONENTS
 
@@ -13,6 +12,8 @@ export stemcell621PivnetUrl=https://network.pivotal.io/api/v2/products/stemcells
 export stemcell621PivnetProductName=light-bosh-stemcell-621.71-aws-xen-hvm-ubuntu-xenial-go_agent.tgz
 export stemcell315PivnetUrl=https://network.pivotal.io/api/v2/products/stemcells-ubuntu-xenial/releases/626507/product_files/663626/download
 export stemcell315PivnetProductName=light-bosh-stemcell-315.179-aws-xen-hvm-ubuntu-xenial-go_agent.tgz
+export stemcell2019PivnetUrl=https://network.pivotal.io/api/v2/products/stemcells-windows-server/releases/630457/product_files/666943/download
+export stemcell2019PivnetProductName=light-bosh-stemcell-2019.20-aws-xen-hvm-windows2019-go_agent.tgz
 
 #SPECIFY REQUIRED PRODUCTS (TILES) FROM PIVOTAL NETWORK
 
@@ -20,21 +21,88 @@ export pasPivnetUrl=https://network.pivotal.io/api/v2/products/elastic-runtime/r
 export pasPivnetProductName=cf-2.8.4-build.16.pivotal
 export pksPivnetUrl=https://network.pivotal.io/api/v2/products/pivotal-container-service/releases/551663/product_files/582811/download
 export pksPivnetProductName=pivotal-container-service-1.6.1-build.6.pivotal
-export harborPivnetUrl=: " -i "https://network.pivotal.io/api/v2/products/harbor-container-registry/releases/579832/product_files/613396/download" harborPivnetUrl
-read -e -p "harborPivnetProductName: " -i "harbor-container-registry-1.10.1-build.7.pivotal" harborPivnetProductName
-read -e -p "mysqlPivnetUrl: " -i "https://network.pivotal.io/api/v2/products/pivotal-mysql/releases/584606/product_files/618567/download" mysqlPivnetUrl
-read -e -p "mysqlPivnetProductName: " -i "pivotal-mysql-2.7.6-build.21.pivotal" mysqlPivnetProductName
+export harborPivnetUrl=https://network.pivotal.io/api/v2/products/harbor-container-registry/releases/579832/product_files/613396/download
+export harborPivnetProductName=harbor-container-registry-1.10.1-build.7.pivotal
+export mysqlPivnetUrl=https://network.pivotal.io/api/v2/products/pivotal-mysql/releases/584606/product_files/618567/download
+export mysqlPivnetProductName=pivotal-mysql-2.7.6-build.21.pivotal
+export rabbitmqPivnetUrl=https://network.pivotal.io/api/v2/products/p-rabbitmq/releases/601550/product_files/636892/download
+export rabbitmqPivnetProductName=p-rabbitmq-1.18.4-build.83.pivotal
+export paswindowsPivnetUrl=https://network.pivotal.io/api/v2/products/pas-windows/releases/625232/product_files/662163/download
+export paswindowsPivnetProductName=pas-windows-2.9.1-build.2.pivotal
+export redisPivnetUrl=https://network.pivotal.io/api/v2/products/p-redis/releases/626432/product_files/663536/download
+export redisPivnetProductName=p-redis-2.3.3-build.2.pivotal
 
+#ACCEPT EULA ON PIVOTAL NETWORK
+
+curl -i -H "Accept: application/json" \
+  -H "Content-Type: application/json" \
+  -H 'Authorization: Token '"$pivnetToken"'' \
+  -X POST https://network.pivotal.io/api/v2/products/stemcells-ubuntu-xenial/releases/579634/eula_acceptance
+
+curl -i -H "Accept: application/json" \
+  -H "Content-Type: application/json" \
+  -H 'Authorization: Token '"$pivnetToken"'' \
+  -X POST https://network.pivotal.io/api/v2/products/stemcells-ubuntu-xenial/releases/630534/eula_acceptance
+  
+curl -i -H "Accept: application/json" \
+  -H "Content-Type: application/json" \
+  -H 'Authorization: Token '"$pivnetToken"'' \
+  -X POST https://network.pivotal.io/api/v2/products/stemcells-ubuntu-xenial/releases/626507/eula_acceptance
+
+curl -i -H "Accept: application/json" \
+  -H "Content-Type: application/json" \
+  -H 'Authorization: Token '"$pivnetToken"'' \
+  -X POST https://network.pivotal.io/api/v2/products/stemcells-windows-server/releases/630457/eula_acceptance
+  
+curl -i -H "Accept: application/json" \
+  -H "Content-Type: application/json" \
+  -H 'Authorization: Token '"$pivnetToken"'' \
+  -X POST https://network.pivotal.io/api/v2/products/elastic-runtime/releases/582590/eula_acceptance
+
+curl -i -H "Accept: application/json" \
+  -H "Content-Type: application/json" \
+  -H 'Authorization: Token '"$pivnetToken"'' \
+  -X POST https://network.pivotal.io/api/v2/products/pivotal-container-service/releases/551663/eula_acceptance
+  
+curl -i -H "Accept: application/json" \
+  -H "Content-Type: application/json" \
+  -H 'Authorization: Token '"$pivnetToken"'' \
+  -X POST https://network.pivotal.io/api/v2/products/harbor-container-registry/releases/579832/eula_acceptance
+
+curl -i -H "Accept: application/json" \
+  -H "Content-Type: application/json" \
+  -H 'Authorization: Token '"$pivnetToken"'' \
+  -X POST https://network.pivotal.io/api/v2/products/pivotal-mysql/releases/584606/eula_acceptance
+
+curl -i -H "Accept: application/json" \
+  -H "Content-Type: application/json" \
+  -H 'Authorization: Token '"$pivnetToken"'' \
+  -X POST https://network.pivotal.io/api/v2/products/p-rabbitmq/releases/601550/eula_acceptance
+
+curl -i -H "Accept: application/json" \
+  -H "Content-Type: application/json" \
+  -H 'Authorization: Token '"$pivnetToken"'' \
+  -X POST https://network.pivotal.io/api/v2/products/pas-windows/releases/625232/eula_acceptance
+
+curl -i -H "Accept: application/json" \
+  -H "Content-Type: application/json" \
+  -H 'Authorization: Token '"$pivnetToken"'' \
+  -X POST https://network.pivotal.io/api/v2/products/p-redis/releases/626432/eula_acceptance
+  
 #DOWNLOAD REQUIRED STEMCELLS (HARDENED OS) TO RUN VARIOUS WORKLOADS AND PLATFORM COMPONENTS
 sudo wget --post-data="" --header="Authorization: Token $pivnetToken" $stemcell456PivnetUrl -O "$stemcell456PivnetProductName"
 sudo wget --post-data="" --header="Authorization: Token $pivnetToken" $stemcell621PivnetUrl -O "$stemcell621PivnetProductName"
 sudo wget --post-data="" --header="Authorization: Token $pivnetToken" $stemcell315PivnetUrl -O "$stemcell315PivnetProductName"
+sudo wget --post-data="" --header="Authorization: Token $pivnetToken" $stemcell2019PivnetUrl -O "$stemcell2019PivnetProductName"
 
 #DOWNLOAD REQUIRED PRODUCTS (TILES) FROM PIVOTAL NETWORK
 sudo wget --post-data="" --header="Authorization: Token $pivnetToken" $pasPivnetUrl -O "$pasPivnetProductName"
 sudo wget --post-data="" --header="Authorization: Token $pivnetToken" $pksPivnetUrl -O "$pksPivnetProductName"
 sudo wget --post-data="" --header="Authorization: Token $pivnetToken" $harborPivnetUrl -O "$harborPivnetProductName"
 sudo wget --post-data="" --header="Authorization: Token $pivnetToken" $mysqlPivnetUrl -O "$mysqlPivnetProductName"
+sudo wget --post-data="" --header="Authorization: Token $pivnetToken" $rabbitmqPivnetUrl -O "$rabbitmqPivnetProductName"
+sudo wget --post-data="" --header="Authorization: Token $pivnetToken" $paswindowsPivnetUrl -O "$paswindowsPivnetProductName"
+sudo wget --post-data="" --header="Authorization: Token $pivnetToken" $redisPivnetUrl -O "$redisPivnetProductName"
 
 #DERIVE THE UAA AUTHENTICATION TOKEN FOR OPS MANAGER
 
