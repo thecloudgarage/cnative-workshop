@@ -1,5 +1,8 @@
 #!/bin/bash
 
+echo Please provide your Pivnet token 
+read -e -p "pivnetToken: " -i "whatisyourtoken" pivnetToken
+
 #INSTALL COMMON UTILITIES
 sudo apt update -y
 sudo apt install openjdk-8-jdk -y
@@ -38,7 +41,7 @@ chmod +x kops
 sudo mv kops /usr/local/bin/
 
 #INSTALL PKS CLI
-wget --post-data="" --header="Authorization: Token <legacy-api-token>" https://network.pivotal.io/api/v2/products/pivotal-container-service/releases/501833/product_files/528557/download -O "pks-linux-amd64-1.6.0-build.225"
+wget --post-data="" --header="Authorization: Token $pivnetToken" https://network.pivotal.io/api/v2/products/pivotal-container-service/releases/501833/product_files/528557/download -O "pks-linux-amd64-1.6.0-build.225"
 sudo mv pks-linux-amd64-1.6.0-build.225 pks
 chmod +x ./pks
 sudo mv ./pks /usr/local/bin
