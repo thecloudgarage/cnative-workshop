@@ -36,67 +36,91 @@ export redisPivnetProductName=p-redis-2.3.3-build.2.pivotal
 export awsservicebrokerPivnetUrl=https://network.pivotal.io/api/v2/products/aws-services/releases/567835/product_files/600335/download
 export awsservicebrokerPivnetProductName=aws-services-1.4.16.256.pivotal
 
-#ACCEPT EULA ON PIVOTAL NETWORK
+#ACCEPT EULA FOR UBUNTU STEMCELL 456 ON PIVOTAL NETWORK
 
 curl -i -H "Accept: application/json" \
   -H "Content-Type: application/json" \
   -H 'Authorization: Token '"$pivnetToken"'' \
   -X POST https://network.pivotal.io/api/v2/products/stemcells-ubuntu-xenial/releases/579634/eula_acceptance
 
+#ACCEPT EULA FOR UBUNTU STEMCELL 621 ON PIVOTAL NETWORK
+
 curl -i -H "Accept: application/json" \
   -H "Content-Type: application/json" \
   -H 'Authorization: Token '"$pivnetToken"'' \
   -X POST https://network.pivotal.io/api/v2/products/stemcells-ubuntu-xenial/releases/630534/eula_acceptance
-  
+
+#ACCEPT EULA FOR UBUNTU STEMCELL 315 ON PIVOTAL NETWORK
+
 curl -i -H "Accept: application/json" \
   -H "Content-Type: application/json" \
   -H 'Authorization: Token '"$pivnetToken"'' \
   -X POST https://network.pivotal.io/api/v2/products/stemcells-ubuntu-xenial/releases/626507/eula_acceptance
+
+#ACCEPT EULA FOR WINDOWS STEMCELL 2019 ON PIVOTAL NETWORK
 
 curl -i -H "Accept: application/json" \
   -H "Content-Type: application/json" \
   -H 'Authorization: Token '"$pivnetToken"'' \
   -X POST https://network.pivotal.io/api/v2/products/stemcells-windows-server/releases/630457/eula_acceptance
 
+#ACCEPT EULA FOR UBUNTU STEMCELL 250 ON PIVOTAL NETWORK
+
 curl -i -H "Accept: application/json" \
   -H "Content-Type: application/json" \
   -H 'Authorization: Token '"$pivnetToken"'' \
   -X POST https://network.pivotal.io/api/v2/products/stemcells-ubuntu-xenial/releases/630535/eula_acceptance
+
+#ACCEPT EULA FOR TANZU APPLICATION SERVICE ON PIVOTAL NETWORK
 
 curl -i -H "Accept: application/json" \
   -H "Content-Type: application/json" \
   -H 'Authorization: Token '"$pivnetToken"'' \
   -X POST https://network.pivotal.io/api/v2/products/elastic-runtime/releases/582590/eula_acceptance
 
+#ACCEPT EULA FOR TANZU KUBERNETES GRID-INTEGRATED (ERSTWHILE ENTERPRISE PKS) ON PIVOTAL NETWORK
+
 curl -i -H "Accept: application/json" \
   -H "Content-Type: application/json" \
   -H 'Authorization: Token '"$pivnetToken"'' \
   -X POST https://network.pivotal.io/api/v2/products/pivotal-container-service/releases/551663/eula_acceptance
-  
+
+#ACCEPT EULA FOR HARBOR ON PIVOTAL NETWORK
+
 curl -i -H "Accept: application/json" \
   -H "Content-Type: application/json" \
   -H 'Authorization: Token '"$pivnetToken"'' \
   -X POST https://network.pivotal.io/api/v2/products/harbor-container-registry/releases/579832/eula_acceptance
+
+#ACCEPT EULA FOR MYSQL ON PIVOTAL NETWORK
 
 curl -i -H "Accept: application/json" \
   -H "Content-Type: application/json" \
   -H 'Authorization: Token '"$pivnetToken"'' \
   -X POST https://network.pivotal.io/api/v2/products/pivotal-mysql/releases/584606/eula_acceptance
 
+#ACCEPT EULA FOR RABBITMQ ON PIVOTAL NETWORK
+
 curl -i -H "Accept: application/json" \
   -H "Content-Type: application/json" \
   -H 'Authorization: Token '"$pivnetToken"'' \
   -X POST https://network.pivotal.io/api/v2/products/p-rabbitmq/releases/601550/eula_acceptance
+
+#ACCEPT EULA FOR TANZU APPLICATION SERVICE (WINDOWS) ON PIVOTAL NETWORK
 
 curl -i -H "Accept: application/json" \
   -H "Content-Type: application/json" \
   -H 'Authorization: Token '"$pivnetToken"'' \
   -X POST https://network.pivotal.io/api/v2/products/pas-windows/releases/625232/eula_acceptance
 
+#ACCEPT EULA FOR REDIS ON PIVOTAL NETWORK
+
 curl -i -H "Accept: application/json" \
   -H "Content-Type: application/json" \
   -H 'Authorization: Token '"$pivnetToken"'' \
   -X POST https://network.pivotal.io/api/v2/products/p-redis/releases/626432/eula_acceptance
+
+#ACCEPT EULA FOR AWS SERVICE BROKER ON PIVOTAL NETWORK
 
 curl -i -H "Accept: application/json" \
   -H "Content-Type: application/json" \
@@ -130,33 +154,57 @@ export uaaToken=$( sudo curl -s -k -H 'Accept: application/json;charset=utf-8' -
 
 sudo curl -vv --progress-bar -H 'Authorization: bearer '"$uaaToken"'' -k -X POST https://localhost/api/v0/stemcells -F \
   'stemcell[file]=@'"$stemcell456PivnetProductName"''
+sudo rm -rf $stemcell456PivnetProductName
+
 sudo curl -vv --progress-bar -H 'Authorization: bearer '"$uaaToken"'' -k -X POST https://localhost/api/v0/stemcells -F \
   'stemcell[file]=@'"$stemcell621PivnetProductName"''
+sudo rm -rf $stemcell621PivnetProductName  
+
 sudo curl -vv --progress-bar -H 'Authorization: bearer '"$uaaToken"'' -k -X POST https://localhost/api/v0/stemcells -F \
   'stemcell[file]=@'"$stemcell315PivnetProductName"''
+sudo rm -rf $stemcell315PivnetProductName
+
 sudo curl -vv --progress-bar -H 'Authorization: bearer '"$uaaToken"'' -k -X POST https://localhost/api/v0/stemcells -F \
   'stemcell[file]=@'"$stemcell2109PivnetProductName"''
+sudo rm -rf $stemcell2019PivnetProductName
+
 sudo curl -vv --progress-bar -H 'Authorization: bearer '"$uaaToken"'' -k -X POST https://localhost/api/v0/stemcells -F \
   'stemcell[file]=@'"$stemcell250PivnetProductName"''  
+sudo rm -rf $stemcell250PivnetProductName
 
 #UPLOAD THE PRODUCT TILES TO OPS MANAGER
 sudo curl -vv --progress-bar -H 'Authorization: bearer '"$uaaToken"'' -k -X POST https://localhost/api/v0/available_products -F \
   'product[file]=@'"$pasPivnetProductName"''
+sudo rm -rf $pasPivnetProductName
+
 sudo curl -vv --progress-bar -H 'Authorization: bearer '"$uaaToken"'' -k -X POST https://localhost/api/v0/available_products -F \
   'product[file]=@'"$pksPivnetProductName"''
+sudo rm -rf $pksPivnetProductName
+
 sudo curl -vv --progress-bar -H 'Authorization: bearer '"$uaaToken"'' -k -X POST https://localhost/api/v0/available_products -F \
   'product[file]=@'"$harborPivnetProductName"''
+sudo rm -rf $harborPivnetProductName
+
 sudo curl -vv --progress-bar -H 'Authorization: bearer '"$uaaToken"'' -k -X POST https://localhost/api/v0/available_products -F \
   'product[file]=@'"$mysqlPivnetProductName"''
+sudo rm -rf $mysqlPivnetProductName
+
 sudo curl -vv --progress-bar -H 'Authorization: bearer '"$uaaToken"'' -k -X POST https://localhost/api/v0/available_products -F \
   'product[file]=@'"$rabbitmqPivnetProductName"''
+sudo rm -rf $rabbitmqPivnetProductName
+
 sudo curl -vv --progress-bar -H 'Authorization: bearer '"$uaaToken"'' -k -X POST https://localhost/api/v0/available_products -F \
   'product[file]=@'"$paswindowsPivnetProductName"''  
+sudo rm -rf $paswindowsPivnetProductName
+
 sudo curl -vv --progress-bar -H 'Authorization: bearer '"$uaaToken"'' -k -X POST https://localhost/api/v0/available_products -F \
   'product[file]=@'"$redisPivnetProductName"''
+sudo rm -rf $redisPivnetProductName
+
 sudo curl -vv --progress-bar -H 'Authorization: bearer '"$uaaToken"'' -k -X POST https://localhost/api/v0/available_products -F \
   'product[file]=@'"$awsservicebrokerPivnetProductName"''
-  
+sudo rm -rf $awsservicebrokerPivnetProductName
+
 #DISABLE THE WILDCARD VERFIER FOR PIVOTAL APPLICATION SERVICE AS DNS IS NOT YET SETUP
 
 #DERIVE THE GU-ID FOR PIVOTAL APPLICATION SERVICE PRODUCT TILE
