@@ -131,7 +131,7 @@ sudo rm -rf $awsservicebrokerPivnetProductName
 export pasguid=$( curl "https://localhost/api/v0/staged/products" -k \
   -X GET \
   -H 'Authorization: Bearer '"$uaaToken"'' \
-  | jq --raw-output '.[] | select(.installation_name|test("cf-.")) | .guid'
+  | jq --raw-output '.[] | select(.installation_name|test("cf-.")) | .guid')
 
 echo "PAS GU-ID is: $pasguid"
 
