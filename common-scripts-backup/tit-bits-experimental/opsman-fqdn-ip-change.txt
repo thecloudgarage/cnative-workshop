@@ -1,0 +1,1 @@
+https://community.pivotal.io/s/article/Pivotal-Cloud-Foundry-Being-Associated-with-Internal-IP-Rather-than-FQDN

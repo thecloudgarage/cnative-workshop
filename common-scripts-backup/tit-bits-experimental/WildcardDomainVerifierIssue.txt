@@ -1,0 +1,27 @@
+Issue: When setting up the platform, if the DNS entries are not setup for system and apps, then deployment will fail
+
+A typical message saying unable to resolve and WildcardDomainVerifier error occurs
+
+Resolution: https://docs.pivotal.io/pivotalcf/2-3/customizing/granular-verifier-control.html
+
+First SSH into Ops Manager
+
+Retrieve the UAA access token
+
+curl -s -k -H 'Accept: application/json;charset=utf-8' -d 'grant_type=password' -d 'username=admin' -d 'password=admin' -u 'opsman:' https://localhost/uaa/oauth/token
+
+Copy the token and paste it below 
+
+curl "https://OPS-MAN-FQDN/api/v0/staged/products" -k \
+-X GET \
+-H "Authorization: Bearer UAA_ACCESS_TOKEN"
+
+Locate the cf-xxxxxxx and the guid for the same
+
+curl "https://OPS-MAN-FQDN/api/v0/staged/products/PRODUCT-GUID/verifiers/install_time/WildcardDomainVerifier" -k \
+-X PUT \
+-H "Authorization: Bearer UAA_ACCESS_TOKEN" \
+-H "Content-Type: application/json" \
+-d '{ "enabled": false }'
+
+Run the installation and accordingly set the Route-53/DNS entries for the sub-domains to the GoRouter
