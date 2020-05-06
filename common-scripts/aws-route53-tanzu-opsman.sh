@@ -12,8 +12,10 @@ HOSTED_ZONE_ID=$( aws route53 list-hosted-zones-by-name | jq --arg name "theclou
 
 echo "Hosted zone being modified: $HOSTED_ZONE_ID"
 
-INPUT_JSON=$( cat ./route53-opsman.json | sed "s/127\.0\.0\.1/$IP/" )
+INPUT_JSON=$( cat ./aws-route53-tanzu-opsman.json | sed "s/127\.0\.0\.1/$IP/" )
 
 INPUT_JSON="{ \"ChangeBatch\": $INPUT_JSON }"
 
 aws route53 change-resource-record-sets --hosted-zone-id "$HOSTED_ZONE_ID" --cli-input-json "$INPUT_JSON"
+
+cat aws-route53-tanzu-opsman.json | sed "s/'$IP'/127\.0\.0\.1/g"
