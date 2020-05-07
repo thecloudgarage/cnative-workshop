@@ -1,8 +1,10 @@
 # vpc.tf
+
 # Create VPC/Subnet/Security Group/ACL
 provider "aws" {
         region     = "${var.region}"
 } # end provider
+
 # create the VPC
 resource "aws_vpc" "TANZU_VPC" {
   cidr_block           = "${var.vpcCIDRblock}"
@@ -13,6 +15,7 @@ tags = {
     Name = "TANZU_VPC"
   }
 } # end resource
+
 # create the Subnet
 resource "aws_subnet" "TANZU_VPC_INFRA_AZ1" {
   vpc_id                  = "${aws_vpc.TANZU_VPC.id}"
@@ -23,6 +26,7 @@ tags = {
    Name = "TANZU_VPC_INFRA_AZ1"
   }
 } # end resource
+
 # create the Subnet
 resource "aws_subnet" "TANZU_VPC_INFRA_AZ2" {
   vpc_id                  = "${aws_vpc.TANZU_VPC.id}"
@@ -33,6 +37,7 @@ tags = {
    Name = "TANZU_VPC_INFRA_AZ2"
   }
 } # end resource
+
 # create the Subnet
 resource "aws_subnet" "TANZU_VPC_TAS_AZ1" {
   vpc_id                  = "${aws_vpc.TANZU_VPC.id}"
@@ -43,6 +48,7 @@ tags = {
    Name = "TANZU_VPC_TAS_AZ1"
   }
 } # end resource
+
 # create the Subnet
 resource "aws_subnet" "TANZU_VPC_TAS_AZ2" {
   vpc_id                  = "${aws_vpc.TANZU_VPC.id}"
@@ -53,6 +59,7 @@ tags = {
    Name = "TANZU_VPC_TAS_AZ2"
   }
 } # end resource
+
 # create the Subnet
 resource "aws_subnet" "TANZU_VPC_TKG_I_AZ1" {
   vpc_id                  = "${aws_vpc.TANZU_VPC.id}"
@@ -63,6 +70,7 @@ tags = {
    Name = "TANZU_VPC_TKG_I_AZ1"
   }
 } # end resource
+
 # create the Subnet
 resource "aws_subnet" "TANZU_VPC_TKG_I_AZ2" {
   vpc_id                  = "${aws_vpc.TANZU_VPC.id}"
@@ -73,6 +81,7 @@ tags = {
    Name = "TANZU_VPC_TKG_I_AZ2"
   }
 } # end resource
+
 # create the Subnet
 resource "aws_subnet" "TANZU_VPC_SERVICES_AZ1" {
   vpc_id                  = "${aws_vpc.TANZU_VPC.id}"
@@ -83,6 +92,7 @@ tags = {
    Name = "TANZU_VPC_SERVICES_AZ1"
   }
 } # end resource
+
 # create the Subnet
 resource "aws_subnet" "TANZU_VPC_SERVICES_AZ2" {
   vpc_id                  = "${aws_vpc.TANZU_VPC.id}"
@@ -93,6 +103,7 @@ tags = {
    Name = "TANZU_VPC_SERVICES_AZ2"
   }
 } # end resource
+
 # Create the Security Group
 resource "aws_security_group" "TANZU_VPC_Security_Group" {
   vpc_id       = "${aws_vpc.TANZU_VPC.id}"
@@ -115,6 +126,7 @@ tags = {
   }
 }
 # end resource
+
 # create VPC Network access control list
 resource "aws_network_acl" "TANZU_VPC_Security_ACL" {
   vpc_id = "${aws_vpc.TANZU_VPC.id}"
@@ -140,6 +152,7 @@ tags = {
     Name = "TANZU_VPC_Security_ACL"
   }
 } # end resource
+
 # Create the Internet Gateway
 resource "aws_internet_gateway" "TANZU_VPC_IGW" {
   vpc_id = "${aws_vpc.TANZU_VPC.id}"
@@ -154,6 +167,7 @@ tags = {
         Name = "TANZU_VPC_RT"
     }
 } # end resource
+
 # Create the Internet Access
 resource "aws_route" "TANZU_VPC_internet_access" {
   route_table_id        = "${aws_route_table.TANZU_VPC_RT.id}"
@@ -185,7 +199,6 @@ resource "aws_route_table_association" "TANZU_VPC_TKG_I_AZ2_association" {
     subnet_id      = "${aws_subnet.TANZU_VPC_TKG_I_AZ2.id}"
     route_table_id = "${aws_route_table.TANZU_VPC_RT.id}"
 } # end resource
-# end vpc.tf
 resource "aws_route_table_association" "TANZU_VPC_SERVICES_AZ1_association" {
     subnet_id      = "${aws_subnet.TANZU_VPC_SERVICES_AZ1.id}"
     route_table_id = "${aws_route_table.TANZU_VPC_RT.id}"
@@ -194,5 +207,117 @@ resource "aws_route_table_association" "TANZU_VPC_SERVICES_AZ2_association" {
     subnet_id      = "${aws_subnet.TANZU_VPC_SERVICES_AZ2.id}"
     route_table_id = "${aws_route_table.TANZU_VPC_RT.id}"
 } # end resource
-# end vpc.tf
+resource "tls_private_key" "key" {
+  algorithm = "RSA"
+}
 
+#create a local file with private key material
+resource "local_file" "key_priv" {
+  content  = "${tls_private_key.key.private_key_pem}"
+  filename = "id_rsa"
+}
+
+resource "null_resource" "key_chown" {
+  provisioner "local-exec" {
+    command = "chmod 400 id_rsa"
+  }
+
+  depends_on = ["local_file.key_priv"]
+}
+
+#create the public key
+resource "null_resource" "key_gen" {
+  provisioner "local-exec" {
+    command = "rm -f id_rsa.pub && ssh-keygen -y -f id_rsa > id_rsa.pub"
+  }
+
+  depends_on = ["local_file.key_priv"]
+}
+
+data "local_file" "key_pub" {
+  filename = "id_rsa.pub"
+
+  depends_on = ["null_resource.key_gen"]
+}
+
+resource "aws_key_pair" "key_tf" {
+  public_key = "${data.local_file.key_pub.content}"
+}
+
+#create the tanzu ops manager instance
+resource "aws_instance" "TANZU_OPS_MANAGER" {
+  depends_on             = ["aws_iam_instance_profile.TANZU_IAM_INSTANCE_PROFILE"]
+  ami                    = "${var.TANZU_OPS_MANAGER_AMI}"
+  instance_type          = "${var.TANZU_OPS_MANAGER_INSTANCE_TYPE}"
+  iam_instance_profile = "${aws_iam_instance_profile.TANZU_IAM_INSTANCE_PROFILE.name}"
+  root_block_device {
+    volume_type = "gp2"
+    volume_size = "80"
+    delete_on_termination = "true"
+  }
+  vpc_security_group_ids = ["${aws_security_group.TANZU_VPC_Security_Group.id}"]
+  key_name      = "${aws_key_pair.key_tf.key_name}"
+  user_data = "${file("../aws-tanzu-opsman-ec2-userdata-without-route53.sh")}"
+  subnet_id = "${aws_subnet.TANZU_VPC_INFRA_AZ1.id}"
+  tags = {
+    Name = "TANZU_OPS_MANAGER"
+  }
+}
+
+#create the IAM role, instance profile and an admin user for various operations to be done by BOSH
+
+resource "aws_iam_role" "TANZU_IAM_ROLE" {
+  name               = "TANZU_IAM_ROLE"
+  assume_role_policy = <<EOF
+{
+  "Version": "2012-10-17",
+  "Statement": [
+    {
+      "Action": "sts:AssumeRole",
+      "Principal": {
+        "Service": "ec2.amazonaws.com"
+      },
+      "Effect": "Allow",
+      "Sid": ""
+    }
+  ]
+}
+EOF
+}
+
+resource "aws_iam_instance_profile" "TANZU_IAM_INSTANCE_PROFILE" {
+  name  = "TANZU_IAM_INSTANCE_PROFILE"
+  role = "${aws_iam_role.TANZU_IAM_ROLE.name}"
+}
+
+resource "aws_iam_user" "TANZU_IAM_USER" {
+    name = "TANZU_IAM_USER"
+    path = "/"
+}
+
+resource "aws_iam_access_key" "access_key" {
+    user = "${aws_iam_user.TANZU_IAM_USER.name}"
+}
+
+resource "aws_iam_policy" "TANZU_IAM_POLICY" {
+    name = "TANZU_IAM_POLICY"
+    policy = <<EOF
+{
+    "Version": "2012-10-17",
+    "Statement": [
+        {
+            "Effect": "Allow",
+            "Action": "*",
+            "Resource": "*"
+        }
+    ]
+}
+EOF
+}
+
+resource "aws_iam_policy_attachment" "TANZU_IAM_ROLE_POLICY_ATTACH" {
+  name       = "TANZU_IAM_ROLE_POLICY_ATTACH"
+  roles      = ["${aws_iam_role.TANZU_IAM_ROLE.name}"]
+  users      = ["${aws_iam_user.TANZU_IAM_USER.name}"]
+  policy_arn = "${aws_iam_policy.TANZU_IAM_POLICY.arn}"
+}

@@ -47,5 +47,11 @@ variable "ipSERVICES_AZ1" {
 variable "ipSERVICES_AZ2" {
  default = "10.0.32.0/24"
 }
+variable "TANZU_OPS_MANAGER_AMI" {
+ default = "ami-0aac5f23906ab0036"
+}
+variable "TANZU_OPS_MANAGER_INSTANCE_TYPE" {
+ default = "t2.medium"
+}
 # end of variables.tf
 
