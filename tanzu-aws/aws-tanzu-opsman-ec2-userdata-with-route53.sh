@@ -1,7 +1,7 @@
 #!/bin/bash
 cd /home/ubuntu
 sudo git clone https://github.com/thecloudgarage/cnative-workshop.git
-cd /home/ubuntu/cnative-workshop/common-scripts/
+cd /home/ubuntu/cnative-workshop/tanzu-aws/
 sudo sed 's/your-legacy-api-token/Ex58-tDkfHxszQQRNdKf/g' aws-tanzu-opsman-deploy.sh > temp.sh && mv temp.sh aws-tanzu-opsman-deploy.sh
 sudo sed 's/your-legacy-api-token/Ex58-tDkfHxszQQRNdKf/g' aws-install-tools.sh > temp.sh && mv temp.sh aws-install-tools.sh
 sudo chmod +x aws-install-tools.sh
