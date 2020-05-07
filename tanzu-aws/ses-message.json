@@ -1,0 +1,12 @@
+{
+  "Subject": {
+     "Data": "TANZU OPS MANAGER INSTALLATION IS COMPLETE",
+     "Charset": "UTF-8"
+  },
+  "Body": {
+     "Text": {
+	"Data": "TANZU OPS MANAGER INSTALLATION IS COMPLETE.",
+	"Charset": "UTF-8"
+    }
+  }
+}
