@@ -1,0 +1,2 @@
+Run the gen-certs.sh and use ACM to import the certificate
+The same cert/key should be applied on BOSH director, Go router, UAA for consistency
