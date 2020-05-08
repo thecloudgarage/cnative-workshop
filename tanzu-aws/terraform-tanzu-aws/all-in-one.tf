@@ -265,6 +265,7 @@ data "template_cloudinit_config" "config" {
             echo "IP to update: $IP"
     #ADD A LOCAL ENTRY FOR DNS RESOLUTION TILL ACTUAL OPS MAN DNS MAPPINGS ARE DONE
     sudo sed "\$a$IP tanzu-opsman.aws.thecloudgarage.com" /etc/hosts > /etc/hosts.temp && mv /etc/hosts.temp /etc/hosts
+    sudo git clone https://github.com/thecloudgarage/cnative-workshop.git
     cd /home/ubuntu/cnative-workshop/tanzu-aws/
     sudo sed 's/your-legacy-api-token/"${var.pivnetToken}"/g' aws-tanzu-opsman-deploy.sh > temp.sh && mv temp.sh aws-tanzu-opsman-deploy.sh
     sudo sed 's/your-legacy-api-token/"${var.pivnetToken}"/g' aws-install-tools.sh > temp.sh && mv temp.sh aws-install-tools.sh
