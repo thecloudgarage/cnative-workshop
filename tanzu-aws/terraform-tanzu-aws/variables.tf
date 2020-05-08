@@ -53,5 +53,8 @@ variable "TANZU_OPS_MANAGER_AMI" {
 variable "TANZU_OPS_MANAGER_INSTANCE_TYPE" {
  default = "t2.medium"
 }
+variable "pivnetToken" {
+ default = ""
+}
 # end of variables.tf
 

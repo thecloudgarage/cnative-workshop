@@ -246,6 +246,9 @@ resource "aws_key_pair" "key_tf" {
 
 #create the user data script
 
+data "template_file" "TANZU-OPS-MAN-TEMPLATE-FILE" {
+  template = file("../aws-tanzu-opsman-ec2-userdata-without-route53.sh")
+}
 data "template_cloudinit_config" "config" {
   gzip          = false
   base64_encode = false
@@ -254,17 +257,6 @@ data "template_cloudinit_config" "config" {
     content_type = "text/x-shellscript"
     content      = <<-EOF
     #!/bin/bash
-    cd /home/ubuntu
-    #FIND THE PUBLIC IP OF EC2 INSTANCE
-    if [ -z "$1" ]; then
-            echo "IP not given...trying EC2 metadata...";
-                IP=$( curl http://169.254.169.254/latest/meta-data/public-ipv4 )
-        else
-                    IP="$1"
-            fi
-            echo "IP to update: $IP"
-    #ADD A LOCAL ENTRY FOR DNS RESOLUTION TILL ACTUAL OPS MAN DNS MAPPINGS ARE DONE
-    sudo sed "\$a$IP tanzu-opsman.aws.thecloudgarage.com" /etc/hosts > /etc/hosts.temp && mv /etc/hosts.temp /etc/hosts
     cd /home/ubuntu/cnative-workshop/tanzu-aws/
     sudo sed 's/your-legacy-api-token/"${var.pivnetToken}"/g' aws-tanzu-opsman-deploy.sh > temp.sh && mv temp.sh aws-tanzu-opsman-deploy.sh
     sudo sed 's/your-legacy-api-token/"${var.pivnetToken}"/g' aws-install-tools.sh > temp.sh && mv temp.sh aws-install-tools.sh
@@ -278,6 +270,11 @@ data "template_cloudinit_config" "config" {
     sudo chmod +x tanzu-tas-disable-wildcard-verifier.sh
     sudo ./tanzu-tas-disable-wildcard-verifier.sh
     EOF
+  }
+  #second part
+  part {
+    content_type = "text/x-shellscript"
+    content      = data.template_file.TANZU-OPS-MAN-TEMPLATE-FILE.rendered
   }
 }
 
@@ -294,7 +291,7 @@ resource "aws_instance" "TANZU_OPS_MANAGER" {
   }
   vpc_security_group_ids = ["${aws_security_group.TANZU_VPC_Security_Group.id}"]
   key_name      = "${aws_key_pair.key_tf.key_name}"
-  user_data = "${data.template_cloudinit_config.config.rendered}"
+  user_data = "${data.template_cloudinit_config.rendered}"
   subnet_id = "${aws_subnet.TANZU_VPC_INFRA_AZ1.id}"
   tags = {
     Name = "TANZU_OPS_MANAGER"
