@@ -1,0 +1,9 @@
+Deploy a Network Load Balancer with two listeners mapped to two separate target groups
+Listener1 (port 80) > target-group1 (port 80)
+Listener2 (port 443) > target-group2 (port 443)
+
+DNS records pointing towards the Network Load Balancer
+
+In the PAS tile GoRouter resource's load balancer field enter a comma separated list of target-group names appended by alb:
+example: alb:target-group1,alb-target-group2
+
