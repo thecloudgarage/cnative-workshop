@@ -11,7 +11,7 @@ export pksguid=$( curl "https://localhost/api/v0/staged/products" -k \
 echo "PKS GU-ID is: $pksguid"
 
 export uaaadminpassword=$( sudo curl \
-  "https://opsman.thecloudgarage.com/api/v0/deployed/products/$pksguid/credentials/.properties.uaa_admin_password" \
+  "https://localhost/api/v0/deployed/products/$pksguid/credentials/.properties.uaa_admin_password" \
   -k -H 'Authorization: bearer '"$uaaToken"'' | jq --raw-output '.credential.value.secret' )
 
 pks login -a api.pks.aws.thecloudgarage.com -u admin -p "$uaaadminpassword" -k
